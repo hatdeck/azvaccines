@@ -10,11 +10,11 @@ declare error_code=""
 
 echo -e "\n\n$(date): Downloading vaccine-phases.pdf from azdhs.gov...\n"
 
-for i in $(seq 0 4); do
-    if [[ $i < 4 ]]; then
+for i in $(seq 0 8); do
+    if [[ $i < 8 ]]; then
         message="* Retrying in 30 min...                                                     *"
     else
-        message="* No update after 2 hours. You may retry manually.                          *"
+        message="* No update after 4 hours. You may retry manually.                          *"
     fi
 
     curl "$url" -o "$filename" -R
