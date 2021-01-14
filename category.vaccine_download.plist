@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist>
+<dict>
+    <key>Label</key>
+    <string>mentalplex.vaccine_download</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/coltrane/Commands/vaccine_download</string>
+        <string>/Users/coltrane/Projects/COVID</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Minute</key>
+        <integer>15</integer>
+
+        <key>Hour</key>
+        <integer>12</integer>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/Users/coltrane/Projects/COVID/AZvaccine_download.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/coltrane/Projects/COVID/AZvaccine_download.log</string>
+
+</dict>
+</plist>

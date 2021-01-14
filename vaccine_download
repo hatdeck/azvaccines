@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+
+cd $1
+declare today=$(date "+%Y-%m-%d")
+declare filename="AZvaccines$today.pdf"
+declare url="https://www.azdhs.gov/documents/preparedness/epidemiology-disease-control/infectious-disease-epidemiology/novel-coronavirus/vaccine-phases.pdf"
+declare message=""
+declare error_code=""
+
+echo -e "\n\n$(date): Downloading vaccine-phases.pdf from azdhs.gov...\n"
+
+for i in $(seq 0 4); do
+    if [[ $i < 4 ]]; then
+        message="* Retrying in 30 min...                                                     *"
+    else
+        message="* No update after 2 hours. You may retry manually.                          *"
+    fi
+
+    curl "$url" -o "$filename" -R
+    error_code="$?"
+
+    if [[ $error_code != 0 ]]; then
+        echo -e "\n\ncurl exited with error code: $error_code" >&2
+        open AZvaccine_download.log
+        exit "$error_code"
+    fi
+
+    file_mtime=$(date -r "$filename" "+%Y-%m-%d")
+    if [[ $file_mtime == $today ]]; then
+        echo -e "\n\n$(date): vaccine-phases.pdf updated today.\n\n"
+        break
+    else
+        echo -e "\n\n"
+        echo -e "*****************************************************************************"
+        echo -e "*                                                                           *"
+        echo -e "* $(date): vaccine-phases.pdf last updated $file_mtime. *"
+        echo -e "$message"
+        echo -e "*                                                                           *"
+        echo -e "*****************************************************************************"
+        sleep 1800
+    fi
+done
+
+
+open AZvaccine_download.log
+open "$filename"
