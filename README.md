@@ -9,22 +9,31 @@ automatically.
 
 ## NOTES:
 
-The syntax <some text> means you have to replace that text with something you
-have chosen. For example if you're supposed to run the command
+1. Syntax: The syntax \<some text\> means you have to replace that text with 
+something you have chosen. For example if you're supposed to run the command
 `mv <path to file> /user/local/bin` you need to find the path to the file in
 question (e.g., `~/Downloads/vaccine_download`) and run the following:
 `mv ~/Downloads/vaccine_download /usr/local/bin`. Do not include the angle
 brackets in the command you type into a terminal session.
 
-The launch agent is written to run at 12:15 pm your local time each day.
-This is to allow enough time for ADHS to update the file for the day. The
-script checks the file metadata to be sure that it has been updated the same
-day the script is run. It will still download the file if it is old, but it
-will alert you to that fact in the log, and keep trying every 30 minutes for 2
-hours until the ADHS updates the file. If ADHS has not updated the file by the
+2. Checking file timestamp: The launch agent is written to run at 12:15 pm your
+local time each day. This is to allow enough time for ADHS to update the file for
+the day. The script checks the file metadata to be sure that it has been updated 
+the sameday the script is run. It will still download the file if it is old, but 
+it will alert you to that fact in the log, and keep trying every 30 minutes for 
+4 hours until the ADHS updates the file. If ADHS has not updated the file by the
 5th try, you will see a starred box in the log file telling you to run it
 manually again if you'd like. Step 4 below shows how to run the launch agent
 manually.
+
+3. Running on a sleeping computer: If your machine is sleeping when the script is 
+scheduled, it will run the next time the computer wakes up. If your machine 
+sleeps at some point during a 30 minute interval between download attempts, the 
+counter that sets that 30 min interval will also pause, and may not restart. The
+solution here is to kickstart it (see troubleshooting). If your machine regularly
+sleeps between 12:15 and 4:15, you may want to change the start time, interval
+between retries, or number of retries.
+
 
 ## Steps
 
@@ -91,7 +100,7 @@ necessary, but will be helpful if you want to run this script manually.
     Updated: 4/13/2021, represents a record of a day without an update.
     2. File not updated YET. This is a problem that should be caught. As
     discussed above, the script checks the file metadata, and retries once every
-    30 minutes for up to 2 hours if it has not updated yet. Watch for late
+    30 minutes for up to 4 hours if it has not updated yet. Watch for late
     updates.
     3. curl error: If the script catches an error in the download utility, curl
     (e.g., unable to reach the server), it will catch that error, stop the
@@ -103,10 +112,10 @@ necessary, but will be helpful if you want to run this script manually.
     check the log directly, and also check launchctl list for errors with the
     following command:
     `egrep <category> <(launchctl list)`
-    Note: <category> is the first part of the launch agent label and the .plist
+    Note: \<category\> is the first part of the launch agent label and the .plist
     filename. You chose it above in step 2.1. Note also that the left angle
-    bracket in <(launchctl list) needs to be in the command (unlike the angle
-    brackets in <category>, which represent a name you should replace)
+    bracket in \<(launchctl list) needs to be in the command (unlike the angle
+    brackets in \<category\>, which represent a name you should replace)
     5. Editing the launch agent after it has been loaded. If you make changes
     to the launch agent once it has been loaded, unload it and then reload it
     `launchctl unload ~/Library/LaunchAgents/<yourplistfile>`
@@ -114,3 +123,13 @@ necessary, but will be helpful if you want to run this script manually.
     If you make changes to the script itself (`vaccine_download`), they will
     go into effect as soon as they are saved and the script is run. You do not
     need to reload the launch agent for changes to the script only.
+    6. Kickstarting the launch agent. If the launch agent has started, but the 
+    script does not appear to be making progress, try kickstarting it. You can 
+    identify this state by running `egrep <category> <(launchctl list)` while
+    viewing the log. The first column in the output is either `-` or a PID, an 
+    integer such as 22183. If no PID is displayed, the launch agent isn't 
+    running. If you want it to run, you can run it manually as described in 4.1.
+    If a PID is displayed, it means the launch agent is currently running. If 
+    you expect output in the log, `AZvaccine_download.log`, but none is present, 
+    kickstart the launch agent with the following:
+    `launchctl kickstart -k gui/$UID/<category>.vaccine_download` 
