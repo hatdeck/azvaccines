@@ -3,12 +3,12 @@
 <plist>
 <dict>
     <key>Label</key>
-    <string>mentalplex.vaccine_download</string>
+    <string>**EDIT**category.vaccine_download</string>
 
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/coltrane/Commands/vaccine_download</string>
-        <string>/Users/coltrane/Projects/COVID</string>
+        <string>**VERIFY**/usr/local/bin/vaccine_download</string>
+        <string>**EDIT**/Users/username/Projects/COVID</string>
     </array>
 
     <key>StartCalendarInterval</key>
@@ -20,9 +20,9 @@
         <integer>12</integer>
     </dict>
     <key>StandardOutPath</key>
-    <string>/Users/coltrane/Projects/COVID/AZvaccine_download.log</string>
+    <string>**EDIT**/Users/username/Projects/COVID/AZvaccine_download.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/coltrane/Projects/COVID/AZvaccine_download.log</string>
+    <string>**EDIT**/Users/username/Projects/COVID/AZvaccine_download.log</string>
 
 </dict>
 </plist>
